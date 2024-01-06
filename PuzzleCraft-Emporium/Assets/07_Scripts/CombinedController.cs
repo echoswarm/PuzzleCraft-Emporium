@@ -190,11 +190,11 @@ public class CombinedController : MonoBehaviour
     IEnumerator MoveCharacter()
     {
         isMoving = true;
-        float remainingDistance = (targetPosition - rb2d.position).sqrMagnitude;
+        float remainingDistance = ((Vector2)targetPosition - rb2d.position).sqrMagnitude;
         while (remainingDistance > float.Epsilon)
         {
-            rb2d.position = Vector2.MoveTowards(rb2d.position, targetPosition, moveSpeed * Time.deltaTime);
-            remainingDistance = (targetPosition - rb2d.position).sqrMagnitude;
+            rb2d.position = Vector2.MoveTowards(rb2d.position, (Vector2)targetPosition, moveSpeed * Time.deltaTime);
+            remainingDistance = ((Vector2)targetPosition - rb2d.position).sqrMagnitude;
             yield return null;
         }
         isMoving = false;
@@ -202,11 +202,11 @@ public class CombinedController : MonoBehaviour
 
     IEnumerator MoveHeldObject()
     {
-        float remainingDistance = (targetPosition - heldObject.transform.position).sqrMagnitude;
+        float remainingDistance = ((Vector2)targetPosition - heldObject.transform.position).sqrMagnitude;
         while (remainingDistance > float.Epsilon)
         {
-            heldObject.transform.position = Vector2.MoveTowards(heldObject.transform.position, targetPosition, moveSpeed * Time.deltaTime);
-            remainingDistance = (targetPosition - heldObject.transform.position).sqrMagnitude;
+            heldObject.transform.position = Vector2.MoveTowards(heldObject.transform.position, (Vector2)targetPosition, moveSpeed * Time.deltaTime);
+            remainingDistance = ((Vector2)targetPosition - heldObject.transform.position).sqrMagnitude;
             yield return null;
         }
     }
