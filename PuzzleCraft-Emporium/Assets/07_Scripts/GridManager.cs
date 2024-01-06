@@ -121,6 +121,17 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    // Helper method to repeat a string a certain number of times
+    private string RepeatString(string str, int count)
+    {
+        string result = "";
+        for (int i = 0; i < count; i++)
+        {
+            result += str;
+        }
+        return result;
+    }
+
     private void InitializeCombinationRules()
     {
         // Add combination rules here
@@ -128,8 +139,8 @@ public class GridManager : MonoBehaviour
         // combinationRules.Add("LogLog", plankPrefab);
         GameObject logPrefab = Resources.Load<GameObject>("Prefabs/Log");
         GameObject plankPrefab = Resources.Load<GameObject>("Prefabs/Plank");
-        combinationRules.Add(new string('Log', 5), plankPrefab);
-        combinationRules.Add(new string('Plank', 5), null);
+        combinationRules.Add(RepeatString("Log", 5), plankPrefab);
+        combinationRules.Add(RepeatString("Plank", 5), null);
     }
 
     public void CheckForCombinationAt(int x, int y)
