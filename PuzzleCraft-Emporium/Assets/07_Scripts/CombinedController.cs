@@ -16,9 +16,7 @@ public class CombinedController : MonoBehaviour
     private Vector2 touchEndPos;
     private Vector2 targetPosition;
     private bool isMoving = false;
-
-    
-
+    private GameObject heldObject = null;
 
     void Start()
     {
@@ -80,6 +78,17 @@ public class CombinedController : MonoBehaviour
         {
             OnMove((int)Mathf.Sign(delta.x));
         }
+        else
+        {
+            if (delta.y > 0)
+            {
+                OnPull();
+            }
+            else
+            {
+                OnShoot();
+            }
+        }
     }
 
     public void OnButtonPressed(string action)
@@ -105,6 +114,40 @@ public class CombinedController : MonoBehaviour
                 targetPosition = gridManager.GridToWorldPosition(newGridPosition.x, newGridPosition.y);
                 StartCoroutine(MoveCharacter());
             }
+        }
+    }
+
+    private void OnPull()
+    {
+        if (!isMoving && heldObject == null)
+        {
+            Vector2Int gridPosition = gridManager.WorldToGridPosition(rb2d.position);
+            Vector2Int newGridPosition = gridPosition + Vector2Int.up;
+            if (gridManager.IsWithinGridBounds(newGridPosition.x, newGridPosition.y))
+            {
+                heldObject = gridManager.GetObjectAtGridPosition(newGridPosition.x, newGridPosition.y);
+                if (heldObject != null)
+                {
+                    gridManager.ClearGridPosition(newGridPosition.x, newGridPosition.y);
+                }
+            }
+        }
+    }
+
+    private void OnShoot()
+    {
+        if (!isMoving && heldObject != null)
+        {
+            Vector2Int gridPosition = gridManager.WorldToGridPosition(rb2d.position);
+            Vector2Int newGridPosition = gridPosition + Vector2Int.up;
+            while (gridManager.IsWithinGridBounds(newGridPosition.x, newGridPosition.y) && gridManager.GetObjectAtGridPosition(newGridPosition.x, newGridPosition.y) == null)
+            {
+                newGridPosition += Vector2Int.up;
+            }
+            newGridPosition -= Vector2Int.up;
+            gridManager.PlaceObjectAtGridPosition(heldObject, newGridPosition.x, newGridPosition.y);
+            heldObject = null;
+            gridManager.CheckForCombinationAt(newGridPosition.x, newGridPosition.y);
         }
     }
 

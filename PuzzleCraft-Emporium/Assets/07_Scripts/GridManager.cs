@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 public class GridManager : MonoBehaviour
 {
     public int gridWidth = 6;
@@ -8,6 +10,8 @@ public class GridManager : MonoBehaviour
     public Vector2 gridOrigin = new Vector2(-2.5f, -5.5f);
     public GameObject gridBackgroundPrefab;
     private GameObject[,] gridObjects;
+
+    private Dictionary<string, GameObject> combinationRules = new Dictionary<string, GameObject>();
 
     // Singleton pattern
     private static GridManager instance;
@@ -43,6 +47,7 @@ public class GridManager : MonoBehaviour
     private void InitializeGrid()
     {
         gridObjects = new GameObject[gridWidth, gridHeight];
+        InitializeCombinationRules();
         for (int x = 0; x < gridWidth; x++)
         {
             for (int y = 0; y < gridHeight; y++)
@@ -90,6 +95,7 @@ public class GridManager : MonoBehaviour
         {
             gridObjects[x, y] = obj;
             obj.transform.position = GridToWorldPosition(x, y);
+            CheckForCombinationAt(x, y);
         }
     }
     public GameObject GetObjectAtGridPosition(int x, int y)
@@ -115,4 +121,41 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    private void InitializeCombinationRules()
+    {
+        // Add combination rules here
+        // For example, if you have a prefab for a log and a plank, you could add a rule like this:
+        // combinationRules.Add("LogLog", plankPrefab);
+    }
+
+    public void CheckForCombinationAt(int x, int y)
+    {
+        GameObject obj = GetObjectAtGridPosition(x, y);
+        if (obj != null)
+        {
+            string objName = obj.name;
+            for (int dx = -1; dx <= 1; dx++)
+            {
+                for (int dy = -1; dy <= 1; dy++)
+                {
+                    if (dx == 0 || dy == 0)
+                    {
+                        GameObject adjacentObj = GetObjectAtGridPosition(x + dx, y + dy);
+                        if (adjacentObj != null && adjacentObj.name == objName)
+                        {
+                            string combinationKey = objName + adjacentObj.name;
+                            if (combinationRules.ContainsKey(combinationKey))
+                            {
+                                GameObject newObj = Instantiate(combinationRules[combinationKey]);
+                                PlaceObjectAtGridPosition(newObj, x, y);
+                                RemoveObjectAtGridPosition(x + dx, y + dy);
+                                Destroy(obj);
+                                Destroy(adjacentObj);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
