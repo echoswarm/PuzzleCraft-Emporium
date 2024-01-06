@@ -87,7 +87,7 @@ public class CombinedController : MonoBehaviour
         else
         {
             Debug.Log("Vertical swipe detected. Delta: " + delta.y);
-            if ((delta.y > 0 && !isYAxisInverted) || (delta.y < 0 && isYAxisInverted)) // Change this line
+            if ((delta.y > 0 && !isYAxisInverted) || (delta.y < 0 && isYAxisInverted))
             {
                 Debug.Log("Swipe up detected. Calling OnPull.");
                 OnPull();
@@ -127,8 +127,8 @@ public class CombinedController : MonoBehaviour
                     // Move the held object along with the player
                     Vector2Int heldObjectGridPosition = gridManager.WorldToGridPosition(heldObject.transform.position);
                     Vector2Int newHeldObjectGridPosition = heldObjectGridPosition + new Vector2Int((int)moveDirection.x, (int)moveDirection.y);
-                    targetPosition = gridManager.GridToWorldPosition(newHeldObjectGridPosition.x, newHeldObjectGridPosition.y);
-                    StartCoroutine(MoveHeldObject());
+                    Vector2 newHeldObjectTargetPosition = gridManager.GridToWorldPosition(newHeldObjectGridPosition.x, newHeldObjectGridPosition.y);
+                    StartCoroutine(MoveHeldObject(newHeldObjectTargetPosition));
                 }
             }
         }
@@ -200,12 +200,12 @@ public class CombinedController : MonoBehaviour
         isMoving = false;
     }
 
-    IEnumerator MoveHeldObject()
+    IEnumerator MoveHeldObject(Vector2 newTargetPosition)
     {
         float remainingDistance = ((Vector2)targetPosition - heldObject.transform.position).sqrMagnitude;
         while (remainingDistance > float.Epsilon)
         {
-            heldObject.transform.position = Vector2.MoveTowards(heldObject.transform.position, (Vector2)targetPosition, moveSpeed * Time.deltaTime);
+            heldObject.transform.position = Vector2.MoveTowards(heldObject.transform.position, newTargetPosition, moveSpeed * Time.deltaTime);
             remainingDistance = ((Vector2)targetPosition - heldObject.transform.position).sqrMagnitude;
             yield return null;
         }
