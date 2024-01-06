@@ -16,6 +16,7 @@ public class CombinedController : MonoBehaviour
     private Vector2 targetPosition;
     private bool isMoving = false;
     private GameObject heldObject = null;
+    private Vector2 heldObjectOffset = new Vector2(0, 1); // Offset to position the held object above the player
     public bool isYAxisInverted = false; // Add this line to declare the new variable
 
     void Start()
@@ -27,6 +28,11 @@ public class CombinedController : MonoBehaviour
     void Update()
     {
         HandleInput();
+        if (heldObject != null)
+        {
+            // Keep the held object above the player
+            heldObject.transform.position = (Vector2)transform.position + heldObjectOffset;
+        }
     }
 
     private void HandleInput()
@@ -81,7 +87,7 @@ public class CombinedController : MonoBehaviour
         else
         {
             Debug.Log("Vertical swipe detected. Delta: " + delta.y);
-            if ((delta.y < 0 && !isYAxisInverted) || (delta.y < 0 && isYAxisInverted)) // Change this line
+            if ((delta.y > 0 && !isYAxisInverted) || (delta.y < 0 && isYAxisInverted)) // Change this line
             {
                 Debug.Log("Swipe up detected. Calling OnPull.");
                 OnPull();
@@ -116,6 +122,14 @@ public class CombinedController : MonoBehaviour
             {
                 targetPosition = gridManager.GridToWorldPosition(newGridPosition.x, newGridPosition.y);
                 StartCoroutine(MoveCharacter());
+                if (heldObject != null)
+                {
+                    // Move the held object along with the player
+                    Vector2Int heldObjectGridPosition = gridManager.WorldToGridPosition(heldObject.transform.position);
+                    Vector2Int newHeldObjectGridPosition = heldObjectGridPosition + new Vector2Int((int)moveDirection.x, (int)moveDirection.y);
+                    targetPosition = gridManager.GridToWorldPosition(newHeldObjectGridPosition.x, newHeldObjectGridPosition.y);
+                    StartCoroutine(MoveHeldObject());
+                }
             }
         }
     }
@@ -143,11 +157,13 @@ public class CombinedController : MonoBehaviour
             }
             foreach (GameObject obj in objectsToPull)
             {
-                gridManager.ClearGridPosition(newGridPosition.x, newGridPosition.y);
+                gridManager.ClearGridPosition(obj.GetComponent<GridObject>().x, obj.GetComponent<GridObject>().y);
             }
             if (objectsToPull.Count > 0)
             {
                 heldObject = objectsToPull[0]; // We only need to keep a reference to one of the objects
+                // Attach the held object to the player
+                heldObject.transform.position = (Vector2)transform.position + heldObjectOffset;
             }
         }
     }
@@ -165,6 +181,7 @@ public class CombinedController : MonoBehaviour
             }
             newGridPosition -= Vector2Int.up;
             gridManager.PlaceObjectAtGridPosition(heldObject, newGridPosition.x, newGridPosition.y);
+            // Release the held object
             heldObject = null;
             gridManager.CheckForCombinationAt(newGridPosition.x, newGridPosition.y);
         }
@@ -181,5 +198,16 @@ public class CombinedController : MonoBehaviour
             yield return null;
         }
         isMoving = false;
+    }
+
+    IEnumerator MoveHeldObject()
+    {
+        float remainingDistance = (targetPosition - heldObject.transform.position).sqrMagnitude;
+        while (remainingDistance > float.Epsilon)
+        {
+            heldObject.transform.position = Vector2.MoveTowards(heldObject.transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            remainingDistance = (targetPosition - heldObject.transform.position).sqrMagnitude;
+            yield return null;
+        }
     }
 }
