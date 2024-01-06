@@ -56,11 +56,11 @@ public class CombinedController : MonoBehaviour
         touchBegan = false;
         touchEnded = false;
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         touchBegan = Input.GetMouseButtonDown(0);
         touchEnded = Input.GetMouseButtonUp(0);
         currentInputPosition = Input.mousePosition;
-    #else
+#else
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -68,7 +68,7 @@ public class CombinedController : MonoBehaviour
             touchEnded = touch.phase == TouchPhase.Ended;
             currentInputPosition = touch.position;
         }
-    #endif
+#endif
     }
 
     private void ProcessInputAction()
@@ -80,12 +80,15 @@ public class CombinedController : MonoBehaviour
         }
         else
         {
+            Debug.Log("Vertical swipe detected. Delta: " + delta.y);
             if (delta.y > 0)
             {
+                Debug.Log("Swipe up detected. Calling OnPull.");
                 OnPull();
             }
             else
             {
+                Debug.Log("Swipe down detected. Calling OnShoot.");
                 OnShoot();
             }
         }
@@ -119,6 +122,7 @@ public class CombinedController : MonoBehaviour
 
     private void OnPull()
     {
+        Debug.Log("OnPull called.");
         if (!isMoving && heldObject == null)
         {
             Vector2Int gridPosition = gridManager.WorldToGridPosition(rb2d.position);
@@ -150,6 +154,7 @@ public class CombinedController : MonoBehaviour
 
     private void OnShoot()
     {
+        Debug.Log("OnShoot called.");
         if (!isMoving && heldObject != null)
         {
             Vector2Int gridPosition = gridManager.WorldToGridPosition(rb2d.position);

@@ -93,6 +93,7 @@ public class GridManager : MonoBehaviour
     {
         if (IsWithinGridBounds(x, y))
         {
+            Debug.Log("Placing object at grid position: " + x + ", " + y);
             gridObjects[x, y] = obj;
             obj.transform.position = GridToWorldPosition(x, y);
             CheckForCombinationAt(x, y);
