@@ -81,7 +81,7 @@ public class CombinedController : MonoBehaviour
         else
         {
             Debug.Log("Vertical swipe detected. Delta: " + delta.y);
-            if ((delta.y > 0 && !isYAxisInverted) || (delta.y < 0 && isYAxisInverted)) // Change this line
+            if ((delta.y < 0 && !isYAxisInverted) || (delta.y < 0 && isYAxisInverted)) // Change this line
             {
                 Debug.Log("Swipe up detected. Calling OnPull.");
                 OnPull();
