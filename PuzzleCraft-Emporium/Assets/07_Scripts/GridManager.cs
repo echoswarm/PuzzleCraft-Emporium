@@ -128,8 +128,8 @@ public class GridManager : MonoBehaviour
         // combinationRules.Add("LogLog", plankPrefab);
         GameObject logPrefab = Resources.Load<GameObject>("Prefabs/Log");
         GameObject plankPrefab = Resources.Load<GameObject>("Prefabs/Plank");
-        combinationRules.Add("LogLogLogLogLog", plankPrefab);
-        combinationRules.Add("PlankPlankPlankPlankPlank", null);
+        combinationRules.Add(new string('Log', 5), plankPrefab);
+        combinationRules.Add(new string('Plank', 5), null);
     }
 
     public void CheckForCombinationAt(int x, int y)

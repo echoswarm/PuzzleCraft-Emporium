@@ -123,18 +123,27 @@ public class CombinedController : MonoBehaviour
         {
             Vector2Int gridPosition = gridManager.WorldToGridPosition(rb2d.position);
             Vector2Int newGridPosition = gridPosition + Vector2Int.up;
+            List<GameObject> objectsToPull = new List<GameObject>();
             while (gridManager.IsWithinGridBounds(newGridPosition.x, newGridPosition.y) && heldObject == null)
             {
-                heldObject = gridManager.GetObjectAtGridPosition(newGridPosition.x, newGridPosition.y);
-                if (heldObject != null)
+                GameObject obj = gridManager.GetObjectAtGridPosition(newGridPosition.x, newGridPosition.y);
+                if (obj != null && (objectsToPull.Count == 0 || objectsToPull[0].name == obj.name))
                 {
-                    gridManager.ClearGridPosition(newGridPosition.x, newGridPosition.y);
+                    objectsToPull.Add(obj);
                 }
                 else
                 {
                     break;
                 }
                 newGridPosition += Vector2Int.up;
+            }
+            foreach (GameObject obj in objectsToPull)
+            {
+                gridManager.ClearGridPosition(newGridPosition.x, newGridPosition.y);
+            }
+            if (objectsToPull.Count > 0)
+            {
+                heldObject = objectsToPull[0]; // We only need to keep a reference to one of the objects
             }
         }
     }
