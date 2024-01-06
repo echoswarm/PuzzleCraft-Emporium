@@ -126,6 +126,10 @@ public class GridManager : MonoBehaviour
         // Add combination rules here
         // For example, if you have a prefab for a log and a plank, you could add a rule like this:
         // combinationRules.Add("LogLog", plankPrefab);
+        GameObject logPrefab = Resources.Load<GameObject>("Prefabs/Log");
+        GameObject plankPrefab = Resources.Load<GameObject>("Prefabs/Plank");
+        combinationRules.Add("LogLogLogLogLog", plankPrefab);
+        combinationRules.Add("PlankPlankPlankPlankPlank", null);
     }
 
     public void CheckForCombinationAt(int x, int y)
