@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Assets\07_Scripts\GameSetupManager.cs" />
     <Compile Include="Assets\07_Scripts\GridManager.cs" />
+    <Compile Include="Assets\07_Scripts\GridObject.cs" />
     <Compile Include="Assets\07_Scripts\CombinedController.cs" />
     <Compile Include="Assets\Scenes\ProjectSetupManager.cs" />
   </ItemGroup>
