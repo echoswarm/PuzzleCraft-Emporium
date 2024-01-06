@@ -55,11 +55,16 @@
     <Analyzer Include="C:\Program Files\Unity 2022.3.11f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\07_Scripts\ExampleScripts\CoinCombinerAndClearer.cs" />
     <Compile Include="Assets\07_Scripts\GameSetupManager.cs" />
     <Compile Include="Assets\07_Scripts\GridManager.cs" />
+    <Compile Include="Assets\07_Scripts\ExampleScripts\CombinedController.cs" />
+    <Compile Include="Assets\07_Scripts\ExampleScripts\GameSetupManager.cs" />
     <Compile Include="Assets\07_Scripts\GridObject.cs" />
     <Compile Include="Assets\07_Scripts\CombinedController.cs" />
     <Compile Include="Assets\Scenes\ProjectSetupManager.cs" />
+    <Compile Include="Assets\07_Scripts\ExampleScripts\GridManager.cs" />
+    <Compile Include="Assets\07_Scripts\ExampleScripts\Coin.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

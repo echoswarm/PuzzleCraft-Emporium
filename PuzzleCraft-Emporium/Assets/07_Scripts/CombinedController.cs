@@ -13,10 +13,10 @@ public class CombinedController : MonoBehaviour
     private Rigidbody2D rb2d;
     private Vector2 touchStartPos;
     private Vector2 touchEndPos;
-    private Vector3 targetPosition; // Modified line
+    private Vector3 targetPosition;
     private bool isMoving = false;
     private GameObject heldObject = null;
-    private Vector2 heldObjectOffset = new Vector2(0, 1); // Offset to position the held object above the player
+    private Vector2 heldObjectOffset = new Vector2(0, 1); 
     public bool isYAxisInverted = false;
 
     void Start()
@@ -86,16 +86,14 @@ public class CombinedController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Vertical swipe detected. Delta: " + delta.y);
             if ((delta.y > 0 && !isYAxisInverted) || (delta.y < 0 && isYAxisInverted))
             {
-                Debug.Log("Swipe up detected. Calling OnPull.");
-                OnPull();
+                OnShoot();
+                
             }
             else
             {
-                Debug.Log("Swipe down detected. Calling OnShoot.");
-                OnShoot();
+                OnPull();
             }
         }
     }
@@ -136,7 +134,6 @@ public class CombinedController : MonoBehaviour
 
     private void OnPull()
     {
-        Debug.Log("OnPull called.");
         if (!isMoving && heldObject == null)
         {
             Vector2Int gridPosition = gridManager.WorldToGridPosition(rb2d.position);
@@ -170,7 +167,6 @@ public class CombinedController : MonoBehaviour
 
     private void OnShoot()
     {
-        Debug.Log("OnShoot called.");
         if (!isMoving && heldObject != null)
         {
             Vector2Int gridPosition = gridManager.WorldToGridPosition(rb2d.position);
