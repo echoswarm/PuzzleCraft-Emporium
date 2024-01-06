@@ -123,18 +123,18 @@ public class CombinedController : MonoBehaviour
         {
             Vector2Int gridPosition = gridManager.WorldToGridPosition(rb2d.position);
             Vector2Int newGridPosition = gridPosition + Vector2Int.up;
-            while (gridManager.IsWithinGridBounds(newGridPosition.x, newGridPosition.y))
+            while (gridManager.IsWithinGridBounds(newGridPosition.x, newGridPosition.y) && heldObject == null)
             {
                 heldObject = gridManager.GetObjectAtGridPosition(newGridPosition.x, newGridPosition.y);
                 if (heldObject != null)
                 {
                     gridManager.ClearGridPosition(newGridPosition.x, newGridPosition.y);
-                    newGridPosition += Vector2Int.up;
                 }
                 else
                 {
                     break;
                 }
+                newGridPosition += Vector2Int.up;
             }
         }
     }
