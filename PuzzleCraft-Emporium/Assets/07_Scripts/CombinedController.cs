@@ -7,7 +7,6 @@ using System.Linq;
 
 public class CombinedController : MonoBehaviour
 {
-
     public GridManager gridManager;
     public float moveSpeed = 5.0f;
     public float gridSize = 1.0f;
@@ -17,6 +16,7 @@ public class CombinedController : MonoBehaviour
     private Vector2 targetPosition;
     private bool isMoving = false;
     private GameObject heldObject = null;
+    public bool isYAxisInverted = false; // Add this line to declare the new variable
 
     void Start()
     {
@@ -81,7 +81,7 @@ public class CombinedController : MonoBehaviour
         else
         {
             Debug.Log("Vertical swipe detected. Delta: " + delta.y);
-            if (delta.y > 0)
+            if ((delta.y > 0 && !isYAxisInverted) || (delta.y < 0 && isYAxisInverted)) // Change this line
             {
                 Debug.Log("Swipe up detected. Calling OnPull.");
                 OnPull();
