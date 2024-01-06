@@ -13,11 +13,11 @@ public class CombinedController : MonoBehaviour
     private Rigidbody2D rb2d;
     private Vector2 touchStartPos;
     private Vector2 touchEndPos;
-    private Vector2 targetPosition;
+    private Vector3 targetPosition; // Modified line
     private bool isMoving = false;
     private GameObject heldObject = null;
     private Vector2 heldObjectOffset = new Vector2(0, 1); // Offset to position the held object above the player
-    public bool isYAxisInverted = false; // Add this line to declare the new variable
+    public bool isYAxisInverted = false;
 
     void Start()
     {
@@ -190,11 +190,11 @@ public class CombinedController : MonoBehaviour
     IEnumerator MoveCharacter()
     {
         isMoving = true;
-        float remainingDistance = ((Vector2)targetPosition - rb2d.position).sqrMagnitude;
+        float remainingDistance = ((Vector3)targetPosition - rb2d.position).sqrMagnitude; // Modified line
         while (remainingDistance > float.Epsilon)
         {
-            rb2d.position = Vector2.MoveTowards(rb2d.position, (Vector2)targetPosition, moveSpeed * Time.deltaTime);
-            remainingDistance = ((Vector2)targetPosition - rb2d.position).sqrMagnitude;
+            rb2d.position = Vector2.MoveTowards(rb2d.position, (Vector3)targetPosition, moveSpeed * Time.deltaTime); // Modified line
+            remainingDistance = ((Vector3)targetPosition - rb2d.position).sqrMagnitude; // Modified line
             yield return null;
         }
         isMoving = false;
@@ -202,11 +202,11 @@ public class CombinedController : MonoBehaviour
 
     IEnumerator MoveHeldObject(Vector2 newTargetPosition)
     {
-        float remainingDistance = ((Vector2)targetPosition - heldObject.transform.position).sqrMagnitude;
+        float remainingDistance = ((Vector3)newTargetPosition - heldObject.transform.position).sqrMagnitude; // Modified line
         while (remainingDistance > float.Epsilon)
         {
             heldObject.transform.position = Vector2.MoveTowards(heldObject.transform.position, newTargetPosition, moveSpeed * Time.deltaTime);
-            remainingDistance = ((Vector2)targetPosition - heldObject.transform.position).sqrMagnitude;
+            remainingDistance = ((Vector3)newTargetPosition - heldObject.transform.position).sqrMagnitude; // Modified line
             yield return null;
         }
     }
