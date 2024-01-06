@@ -7,15 +7,6 @@ using UnityEngine.SceneManagement;
 
 
 [System.Serializable]
-public class GridObject
-{
-    public GameObject prefab;
-    public int x;
-    public int y;
-    public int rarity;
-}
-
-[System.Serializable]
 public class PrefabRarity
 {
     public GameObject prefab;
