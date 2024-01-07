@@ -186,11 +186,11 @@ public class CombinedController : MonoBehaviour
     IEnumerator MoveCharacter()
     {
         isMoving = true;
-        float remainingDistance = ((Vector3)targetPosition - (Vector3)rb2d.position).sqrMagnitude; // Modified line
+        float remainingDistance = ((Vector3)targetPosition - (Vector3)rb2d.position).sqrMagnitude;
         while (remainingDistance > float.Epsilon)
         {
-            rb2d.position = Vector2.MoveTowards(rb2d.position, (Vector2)targetPosition, moveSpeed * Time.deltaTime); // Modified line
-            remainingDistance = ((Vector3)targetPosition - (Vector3)rb2d.position).sqrMagnitude; // Modified line
+            rb2d.position = Vector2.MoveTowards(rb2d.position, (Vector2)targetPosition, moveSpeed * Time.deltaTime);
+            remainingDistance = ((Vector3)targetPosition - (Vector3)rb2d.position).sqrMagnitude;
             yield return null;
         }
         isMoving = false;
@@ -198,11 +198,11 @@ public class CombinedController : MonoBehaviour
 
     IEnumerator MoveHeldObject(Vector2 newTargetPosition)
     {
-        float remainingDistance = ((Vector3)newTargetPosition - (Vector3)heldObject.transform.position).sqrMagnitude; // Modified line
+        float remainingDistance = ((Vector3)newTargetPosition - (Vector3)heldObject.transform.position).sqrMagnitude;
         while (remainingDistance > float.Epsilon)
         {
             heldObject.transform.position = Vector2.MoveTowards(heldObject.transform.position, newTargetPosition, moveSpeed * Time.deltaTime);
-            remainingDistance = ((Vector3)newTargetPosition - (Vector3)heldObject.transform.position).sqrMagnitude; // Modified line
+            remainingDistance = ((Vector3)newTargetPosition - (Vector3)heldObject.transform.position).sqrMagnitude;
             yield return null;
         }
     }

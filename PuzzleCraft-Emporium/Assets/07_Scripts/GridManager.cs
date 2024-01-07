@@ -150,6 +150,7 @@ public class GridManager : MonoBehaviour
         if (obj != null)
         {
             string objName = obj.name;
+            int adjacentCount = 0;
             for (int dx = -1; dx <= 1; dx++)
             {
                 for (int dy = -1; dy <= 1; dy++)
@@ -159,6 +160,7 @@ public class GridManager : MonoBehaviour
                         GameObject adjacentObj = GetObjectAtGridPosition(x + dx, y + dy);
                         if (adjacentObj != null && adjacentObj.name == objName)
                         {
+                            adjacentCount++;
                             string combinationKey = objName + adjacentObj.name;
                             if (combinationRules.ContainsKey(combinationKey))
                             {
@@ -170,6 +172,37 @@ public class GridManager : MonoBehaviour
                             }
                         }
                     }
+                }
+            }
+            if (objName == "Plank" && adjacentCount >= 5)
+            {
+                for (int dx = -1; dx <= 1; dx++)
+                {
+                    for (int dy = -1; dy <= 1; dy++)
+                    {
+                        if (dx == 0 || dy == 0)
+                        {
+                            GameObject adjacentObj = GetObjectAtGridPosition(x + dx, y + dy);
+                            if (adjacentObj != null && adjacentObj.name == objName)
+                            {
+                                RemoveObjectAtGridPosition(x + dx, y + dy);
+                                Destroy(adjacentObj);
+                            }
+                        }
+                    }
+                }
+                RemoveObjectAtGridPosition(x, y);
+                Destroy(obj);
+            }
+            else if (objName == "Log" && adjacentCount == 4)
+            {
+                GameObject plankPrefab = combinationRules["LogLogLogLogLog"];
+                if (plankPrefab != null)
+                {
+                    GameObject newPlank = Instantiate(plankPrefab);
+                    PlaceObjectAtGridPosition(newPlank, x, y);
+                    RemoveObjectAtGridPosition(x, y);
+                    Destroy(obj);
                 }
             }
         }
